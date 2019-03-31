@@ -5,55 +5,38 @@ namespace app\controllers;
 use app\models\ReCaptcha;
 use yii\web\Controller;
 use Yii;
+use yii\helpers\Url;
 
 class SiteController extends Controller
 {
 
     public function actionIndex(){
 
-        $model = new ReCaptcha();
+        $modelReCaptcha = new ReCaptcha();
 
-        return $this->render('index', ['model' => $model]);
-
+        return $this->render('index', ['modelReCaptcha' => $modelReCaptcha]);
     }
 
-    public function actionAjax(){
 
 
-//        $url = "http://api.giphy.com/v1/gifs/search?q=ryan+gosling&api_key=17fGihaZCOPTnfWmlr4JPLyS56SPiMfC&limit=100";
-//        $lol = json_decode(file_get_contents($url));
-//        $num = rand(1, 100);
-//        echo "<pre>";
-//        var_dump($lol);
+    public function actionGiphy(){
 
 
-        if(Yii::$app->request->isAjax){
-
+        if(Yii::$app->request->isPjax){
             $url = "http://api.giphy.com/v1/gifs/search?q=ryan+gosling&api_key=17fGihaZCOPTnfWmlr4JPLyS56SPiMfC&limit=100";
-            $lol = json_decode(file_get_contents($url));
+            $modelsGiphy = json_decode(file_get_contents($url));
             $num = rand(1, 100);
-
-            $img = $lol->data[$num]->images->fixed_width->url;
-
+            $img = $modelsGiphy->data[$num]->images->fixed_width->url;
             return  ("<img src='$img' style='width: 100%'>");
-//
         }
         else{
             return $this->redirect('index');
 
-//            $model = new ReCaptcha();
-//            return $this->renderAjax('index', ['model' => $model]);
         }
 
 
 
     }
 
-    public function actionForm(){
-
-//        $mode;
-
-        return $this->renderAjax('_form');
-    }
 
 }
